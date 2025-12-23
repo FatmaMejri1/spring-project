@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Join Smart Career Hub - Choose your path">
+    <title th:text="${pageTitle} + ' - Smart Career Hub'">Choose Your Path - Smart Career Hub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="back-home">
+            <a th:href="@{/}">
+                ← Back to Home
+            </a>
+        </div>
+
+        <div class="auth-container choice-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-logo">Smart Career Hub</div>
+                    <h1 class="auth-title">Choose Your Path</h1>
+                    <p class="auth-subtitle">Select how you want to join our community</p>
+                </div>
+
+                <div class="choice-grid">
+                    <!-- Job Seeker Card -->
+                    <div class="choice-card" onclick="window.location.href='/auth/register/chercheur'">
+                        <div class="choice-icon"></div>
+                        <h2 class="choice-title">Job Seeker</h2>
+                        <p class="choice-description">
+                            Find your dream job, connect with recruiters, and take your career to the next level.
+                        </p>
+                        <a th:href="@{/auth/register/chercheur}" class="btn btn-primary">
+                            Get Started
+                        </a>
+                    </div>
+
+                    <!-- Recruiter Card -->
+                    <div class="choice-card" onclick="window.location.href='/auth/register/recruteur'">
+                        <div class="choice-icon"></div>
+                        <h2 class="choice-title">Recruiter</h2>
+                        <p class="choice-description">
+                            Post jobs, discover top talent, and build your dream team with the best candidates.
+                        </p>
+                        <a th:href="@{/auth/register/recruteur}" class="btn btn-primary">
+                            Start Hiring
+                        </a>
+                    </div>
+                </div>
+
+                <div class="auth-footer" style="margin-top: var(--spacing-xl);">
+                    Already have an account?
+                    <a th:href="@{/auth/login}">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

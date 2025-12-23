@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sign in to Smart Career Hub">
+    <title th:text="${pageTitle} + ' - Smart Career Hub'">Sign In - Smart Career Hub</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+
+<body>
+    <div class="auth-page">
+        <div class="back-home">
+            <a th:href="@{/}">
+                ← Back to Home
+            </a>
+        </div>
+
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <div class="auth-logo">Smart Career Hub</div>
+                    <h1 class="auth-title">Welcome Back!</h1>
+                    <p class="auth-subtitle">Sign in to continue your career journey</p>
+                </div>
+
+                <form class="auth-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email"
+                            required autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-input"
+                            placeholder="Enter your password" required autocomplete="current-password">
+                    </div>
+
+                    <div class="form-group"
+                        style="flex-direction: row; justify-content: space-between; align-items: center;">
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-auth">
+                        Sign In
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+                <div class="auth-footer">
+                    Don't have an account?
+                    <a th:href="@{/auth/register-choice}">Create Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = {
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value
+            };
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Store the JWT token
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('userRole', data.role);
+
+                    // Show success message
+                    alert('Login successful! Welcome back!');
+
+                    // Redirect based on role
+                    if (data.role === 'ROLE_CANDIDAT') {
+                        window.location.href = '/chercheur/dashboard';
+                    } else if (data.role === 'ROLE_RECRUTEUR') {
+                        window.location.href = '/recruiter/dashboard';
+                    } else if (data.role === 'ROLE_ADMIN') {
+                        window.location.href = '/admin/dashboard';
+                    } else {
+                        window.location.href = '/';
+                    }
+                } else {
+                    const error = await response.text();
+                    alert('Login failed: ' + (error || 'Invalid credentials'));
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    </script>
+</body>
+
+</html>
